@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: hrms_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-hrms}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-hrms_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-hrms}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      # host:container — host port 5433 avoids clashing with a native Mac Postgres on 5432
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-hrms}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    container_name: hrms_backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-hrms}:${POSTGRES_PASSWORD:-hrms_pass}@db:5432/${POSTGRES_DB:-hrms}
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-prod}
+      SEED_ON_START: "true"
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build: ./frontend
+    container_name: hrms_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
+
+volumes:
+  pgdata:
