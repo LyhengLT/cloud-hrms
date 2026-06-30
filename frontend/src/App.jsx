@@ -2,12 +2,15 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "./context/AuthContext.jsx";
 import Layout from "./components/Layout.jsx";
 import Login from "./pages/Login.jsx";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Employees from "./pages/Employees.jsx";
 import Departments from "./pages/Departments.jsx";
 import Attendance from "./pages/Attendance.jsx";
 import Leaves from "./pages/Leaves.jsx";
 import Payroll from "./pages/Payroll.jsx";
+import Reports from "./pages/Reports.jsx";
 
 // Guard: requires login; optionally restricts to roles
 function Protected({ children, roles }) {
@@ -24,6 +27,8 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route
         element={
           <Protected>
@@ -37,6 +42,7 @@ export default function App() {
         <Route path="/attendance" element={<Attendance />} />
         <Route path="/leaves" element={<Leaves />} />
         <Route path="/payroll" element={<Payroll />} />
+        <Route path="/reports" element={<Protected roles={HR}><Reports /></Protected>} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

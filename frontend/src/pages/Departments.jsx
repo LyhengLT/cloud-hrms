@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { api } from "../api";
 import { useAuth } from "../context/AuthContext.jsx";
+import { Chip, PageHeader } from "../components/ui.jsx";
+
+const DEPT_ICONS = ["🏢", "💻", "👔", "📈", "🎯", "🛠️", "🎨", "📦"];
 
 export default function Departments() {
   const { user } = useAuth();
@@ -32,45 +35,44 @@ export default function Departments() {
     catch (e) { alert(e.message); }
   }
 
+  const totalStaff = rows.reduce((a, d) => a + d.employee_count, 0);
+
   return (
     <div>
-      <h1 className="lh-page-title">Departments</h1>
-      <p className="lh-page-sub">Organizational units and headcount.</p>
+      <PageHeader icon="🏢" title="Departments" sub="Organizational units and headcount.">
+        {isHR && <button className="lh-btn" onClick={openCreate}>+ Add Department</button>}
+      </PageHeader>
 
-      {isHR && (
-        <div className="lh-toolbar">
-          <div />
-          <button className="lh-btn" onClick={openCreate}>+ Add Department</button>
-        </div>
-      )}
+      <div className="lh-chips">
+        <Chip label="Departments" value={rows.length} />
+        <Chip label="Total staff" value={totalStaff} color="#06b6d4" />
+      </div>
 
-      <div className="lh-table-wrap">
-        <table className="lh-table">
-          <thead>
-            <tr><th>Name</th><th>Description</th><th>Employees</th>{isHR && <th></th>}</tr>
-          </thead>
-          <tbody>
-            {rows.map((d) => (
-              <tr key={d.id}>
-                <td><strong>{d.name}</strong></td>
-                <td>{d.description || "—"}</td>
-                <td>{d.employee_count}</td>
-                {isHR && (
-                  <td style={{ whiteSpace: "nowrap", textAlign: "right" }}>
-                    <button className="lh-btn lh-btn-ghost lh-btn-sm" onClick={() => openEdit(d)}>Edit</button>{" "}
-                    {/* Delete is Admin-only */}
-                    {isAdmin && (
-                      <button className="lh-btn lh-btn-danger lh-btn-sm" onClick={() => remove(d)}>Delete</button>
-                    )}
-                  </td>
-                )}
-              </tr>
-            ))}
-            {rows.length === 0 && (
-              <tr><td colSpan={isHR ? 4 : 3} className="lh-empty">No departments yet.</td></tr>
-            )}
-          </tbody>
-        </table>
+      <div className="lh-dept-grid">
+        {rows.map((d, i) => (
+          <div className="lh-dept-card" key={d.id} style={{ animationDelay: `${i * 0.05}s` }}>
+            <div className="lh-dept-ico">{DEPT_ICONS[i % DEPT_ICONS.length]}</div>
+            <div className="lh-dept-name">{d.name}</div>
+            <div className="lh-dept-desc">{d.description || "No description"}</div>
+            <div className="lh-dept-foot">
+              <div>
+                <span className="lh-dept-count">{d.employee_count}</span>
+                <span style={{ color: "var(--lh-muted)", fontSize: 13, marginLeft: 6 }}>
+                  {d.employee_count === 1 ? "member" : "members"}
+                </span>
+              </div>
+              {isHR && (
+                <div style={{ display: "flex", gap: 8 }}>
+                  <button className="lh-btn lh-btn-ghost lh-btn-sm" onClick={() => openEdit(d)}>Edit</button>
+                  {isAdmin && (
+                    <button className="lh-btn lh-btn-danger lh-btn-sm" onClick={() => remove(d)}>Delete</button>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+        {rows.length === 0 && <p className="lh-empty">No departments yet.</p>}
       </div>
 
       {modal && (

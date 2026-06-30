@@ -29,6 +29,13 @@ services:
       DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-hrms}:${POSTGRES_PASSWORD:-hrms_pass}@db:5432/${POSTGRES_DB:-hrms}
       JWT_SECRET: ${JWT_SECRET:-change-me-in-prod}
       SEED_ON_START: "true"
+      # Password-reset email (left blank -> reset link is printed to backend logs)
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_FROM: ${SMTP_FROM:-Cloud HRMS <no-reply@hrms.com>}
     ports:
       - "8000:8000"
 

@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .config import settings
 from .database import Base, engine
-from .routers import attendance, auth, departments, employees, leave, payroll
+from .routers import attendance, auth, departments, employees, leave, payroll, stats
 from .seed import seed
 
 
@@ -39,6 +39,7 @@ app.include_router(employees.router)
 app.include_router(attendance.router)
 app.include_router(leave.router)
 app.include_router(payroll.router)
+app.include_router(stats.router)
 
 
 @app.get("/")

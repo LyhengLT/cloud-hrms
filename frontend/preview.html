@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cloud HRMS — UI preview</title>
+<!-- Uses the REAL app stylesheet so this preview matches the live app -->
+<link rel="stylesheet" href="src/index.css" />
+<style>
+  .pv-bar { display:flex; gap:8px; padding:10px 16px; background:#0f172a; flex-wrap:wrap; position:sticky; top:0; z-index:99; }
+  .pv-bar button { background:#1e293b; color:#fff; border:none; padding:7px 14px; border-radius:8px; cursor:pointer; font-weight:600; }
+  .pv-bar button:hover { background:#334155; }
+  .pv-hide { display:none; }
+  .pv-page { padding:26px; }
+</style>
+</head>
+<body>
+  <div class="pv-bar">
+    <button onclick="show('login')">Login</button>
+    <button onclick="show('dash')">Dashboard</button>
+    <button onclick="show('emp')">Employees</button>
+    <button onclick="show('dept')">Departments</button>
+    <button onclick="show('rep')">Reports</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="login" class="lh-login pv-hide">
+    <div class="lh-login-card">
+      <h1 class="lh-login-title">Cloud HRMS</h1>
+      <p class="lh-login-sub">Human Resource Management System</p>
+      <div class="lh-field"><label>Email</label><input class="lh-input" placeholder="you@company.com" /></div>
+      <div class="lh-field"><label>Password</label><input class="lh-input" type="password" placeholder="••••••••" /></div>
+      <button class="lh-btn lh-block">Sign in</button>
+      <p style="text-align:center;margin-top:18px;font-size:14px"><a style="color:var(--lh-primary);font-weight:600;text-decoration:none">Forgot password?</a></p>
+    </div>
+  </div>
+
+  <!-- APP SHELL (shared) -->
+  <div id="app" class="lh-app">
+    <aside class="lh-sidebar">
+      <div class="lh-brand"><span class="lh-logo">⛅</span> Cloud HRMS</div>
+      <nav class="lh-nav">
+        <a class="lh-nav-item" id="nav-dash" onclick="show('dash')"><span class="lh-nav-icon">▦</span>Dashboard</a>
+        <a class="lh-nav-item" id="nav-emp" onclick="show('emp')"><span class="lh-nav-icon">☷</span>Employees</a>
+        <a class="lh-nav-item" id="nav-dept" onclick="show('dept')"><span class="lh-nav-icon">▤</span>Departments</a>
+        <a class="lh-nav-item"><span class="lh-nav-icon">◷</span>Attendance</a>
+        <a class="lh-nav-item"><span class="lh-nav-icon">✈</span>Leaves</a>
+        <a class="lh-nav-item"><span class="lh-nav-icon">$</span>Payroll</a>
+        <a class="lh-nav-item" id="nav-rep" onclick="show('rep')"><span class="lh-nav-icon">📊</span>Reports</a>
+      </nav>
+    </aside>
+    <div class="lh-main">
+      <header class="lh-topbar">
+        <div></div>
+        <div class="lh-user">
+          <div class="lh-user-info"><strong>System Admin</strong><span class="lh-badge">ADMIN</span></div>
+          <button class="lh-btn lh-btn-ghost">Logout</button>
+        </div>
+      </header>
+
+      <!-- DASHBOARD -->
+      <main id="dash" class="lh-content">
+        <div class="lh-hero">
+          <div>
+            <div class="lh-hero-date">Wednesday, June 24, 2026</div>
+            <h1 class="lh-hero-title">Welcome back, System 👋</h1>
+            <p class="lh-hero-sub">Here's what's happening across your organization today.</p>
+          </div>
+          <div class="lh-hero-badge">ADMIN</div>
+        </div>
+        <div class="lh-card lh-clock" style="margin-bottom:24px">
+          <div>
+            <div style="font-size:12px;color:var(--lh-muted);font-weight:700;letter-spacing:.5px">ATTENDANCE</div>
+            <div style="font-size:19px;font-weight:700;margin-top:2px">Working · since 10:35 PM</div>
+          </div>
+          <div style="display:flex;gap:10px">
+            <button class="lh-btn lh-btn-green">Check in</button>
+            <button class="lh-btn lh-btn-ghost">Check out</button>
+          </div>
+        </div>
+        <div class="lh-stat-grid">
+          <div class="lh-stat lh-stat-click"><div class="lh-stat-ico">👥</div><div class="lh-stat-num">24</div><div class="lh-stat-label">Total Employees</div></div>
+          <div class="lh-stat lh-stat-click"><div class="lh-stat-ico">🏢</div><div class="lh-stat-num">3</div><div class="lh-stat-label">Departments</div></div>
+          <div class="lh-stat lh-stat-click"><div class="lh-stat-ico">✈️</div><div class="lh-stat-num">5</div><div class="lh-stat-label">Pending Leaves</div></div>
+          <div class="lh-stat lh-stat-click"><div class="lh-stat-ico">💵</div><div class="lh-stat-num">18</div><div class="lh-stat-label">Payslips Issued</div></div>
+        </div>
+        <h3 style="margin:4px 0 14px;font-size:16px">Quick actions</h3>
+        <div class="lh-action-grid">
+          <div class="lh-action"><div class="lh-action-ico">➕</div><div><div class="lh-action-title">Add Employee</div><div class="lh-action-desc">Onboard a new team member</div></div><div class="lh-action-arrow">→</div></div>
+          <div class="lh-action"><div class="lh-action-ico">📊</div><div><div class="lh-action-title">Reports</div><div class="lh-action-desc">Org-wide analytics</div></div><div class="lh-action-arrow">→</div></div>
+          <div class="lh-action"><div class="lh-action-ico">📋</div><div><div class="lh-action-title">Review Leaves</div><div class="lh-action-desc">Approve or reject requests</div></div><div class="lh-action-arrow">→</div></div>
+        </div>
+      </main>
+
+      <!-- EMPLOYEES -->
+      <main id="emp" class="lh-content pv-hide">
+        <div class="lh-phead">
+          <div class="lh-phead-ico">👥</div>
+          <div style="flex:1"><h1 class="lh-page-title" style="margin:0">Employees</h1><p class="lh-page-sub" style="margin:2px 0 0">Manage your organization's people.</p></div>
+          <div class="lh-phead-actions"><button class="lh-btn">+ Add Employee</button></div>
+        </div>
+        <div class="lh-chips">
+          <div class="lh-chip"><span class="lh-chip-dot" style="background:var(--lh-primary)"></span><span class="lh-chip-val" style="color:var(--lh-primary)">4</span><span class="lh-chip-label">Total</span></div>
+          <div class="lh-chip"><span class="lh-chip-dot" style="background:#7c3aed"></span><span class="lh-chip-val" style="color:#7c3aed">1</span><span class="lh-chip-label">Admins</span></div>
+          <div class="lh-chip"><span class="lh-chip-dot" style="background:#0891b2"></span><span class="lh-chip-val" style="color:#0891b2">1</span><span class="lh-chip-label">HR</span></div>
+          <div class="lh-chip"><span class="lh-chip-dot" style="background:#16a34a"></span><span class="lh-chip-val" style="color:#16a34a">2</span><span class="lh-chip-label">Employees</span></div>
+        </div>
+        <div class="lh-toolbar"><input class="lh-input" style="max-width:320px" placeholder="🔍  Search by ID, name, or email…" /></div>
+        <div class="lh-table-wrap">
+          <table class="lh-table">
+            <thead><tr><th>ID</th><th>Name</th><th>Position</th><th>Department</th><th>Role</th><th>Salary</th><th></th></tr></thead>
+            <tbody>
+              <tr><td style="color:var(--lh-muted);font-weight:600">#1</td><td><div class="lh-cell-user"><div class="lh-avatar" style="width:36px;height:36px;font-size:14px;background:linear-gradient(135deg,#4f46e5,#6366f1)">DS</div><div><div style="font-weight:600">Dara Sok</div><div style="font-size:12px;color:var(--lh-muted)">dara@hrms.com</div></div></div></td><td>Software Engineer</td><td>Engineering</td><td><span class="lh-badge">EMPLOYEE</span></td><td>$1,800</td><td style="text-align:right"><button class="lh-btn lh-btn-ghost lh-btn-sm">Edit</button> <button class="lh-btn lh-btn-danger lh-btn-sm">Delete</button></td></tr>
+              <tr><td style="color:var(--lh-muted);font-weight:600">#2</td><td><div class="lh-cell-user"><div class="lh-avatar" style="width:36px;height:36px;font-size:14px;background:linear-gradient(135deg,#0891b2,#06b6d4)">HR</div><div><div style="font-weight:600">Helen Reyes</div><div style="font-size:12px;color:var(--lh-muted)">hr@hrms.com</div></div></div></td><td>HR Manager</td><td>Human Resources</td><td><span class="lh-badge">HR</span></td><td>$2,500</td><td style="text-align:right"><button class="lh-btn lh-btn-ghost lh-btn-sm">Edit</button> <button class="lh-btn lh-btn-danger lh-btn-sm">Delete</button></td></tr>
+              <tr><td style="color:var(--lh-muted);font-weight:600">#3</td><td><div class="lh-cell-user"><div class="lh-avatar" style="width:36px;height:36px;font-size:14px;background:linear-gradient(135deg,#db2777,#ec4899)">SC</div><div><div style="font-weight:600">Sophea Chan</div><div style="font-size:12px;color:var(--lh-muted)">sophea@hrms.com</div></div></div></td><td>Sales Executive</td><td>Sales</td><td><span class="lh-badge">EMPLOYEE</span></td><td>$1,500</td><td style="text-align:right"><button class="lh-btn lh-btn-ghost lh-btn-sm">Edit</button> <button class="lh-btn lh-btn-danger lh-btn-sm">Delete</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+
+      <!-- DEPARTMENTS -->
+      <main id="dept" class="lh-content pv-hide">
+        <div class="lh-phead">
+          <div class="lh-phead-ico">🏢</div>
+          <div style="flex:1"><h1 class="lh-page-title" style="margin:0">Departments</h1><p class="lh-page-sub" style="margin:2px 0 0">Organizational units and headcount.</p></div>
+          <div class="lh-phead-actions"><button class="lh-btn">+ Add Department</button></div>
+        </div>
+        <div class="lh-chips">
+          <div class="lh-chip"><span class="lh-chip-dot" style="background:var(--lh-primary)"></span><span class="lh-chip-val" style="color:var(--lh-primary)">3</span><span class="lh-chip-label">Departments</span></div>
+          <div class="lh-chip"><span class="lh-chip-dot" style="background:#06b6d4"></span><span class="lh-chip-val" style="color:#06b6d4">24</span><span class="lh-chip-label">Total staff</span></div>
+        </div>
+        <div class="lh-dept-grid">
+          <div class="lh-dept-card"><div class="lh-dept-ico">🏢</div><div class="lh-dept-name">Engineering</div><div class="lh-dept-desc">Software & infrastructure</div><div class="lh-dept-foot"><div><span class="lh-dept-count">12</span><span style="color:var(--lh-muted);font-size:13px;margin-left:6px">members</span></div><div style="display:flex;gap:8px"><button class="lh-btn lh-btn-ghost lh-btn-sm">Edit</button><button class="lh-btn lh-btn-danger lh-btn-sm">Delete</button></div></div></div>
+          <div class="lh-dept-card"><div class="lh-dept-ico">💻</div><div class="lh-dept-name">Human Resources</div><div class="lh-dept-desc">People operations</div><div class="lh-dept-foot"><div><span class="lh-dept-count">5</span><span style="color:var(--lh-muted);font-size:13px;margin-left:6px">members</span></div><div style="display:flex;gap:8px"><button class="lh-btn lh-btn-ghost lh-btn-sm">Edit</button><button class="lh-btn lh-btn-danger lh-btn-sm">Delete</button></div></div></div>
+          <div class="lh-dept-card"><div class="lh-dept-ico">👔</div><div class="lh-dept-name">Sales</div><div class="lh-dept-desc">Revenue & accounts</div><div class="lh-dept-foot"><div><span class="lh-dept-count">7</span><span style="color:var(--lh-muted);font-size:13px;margin-left:6px">members</span></div><div style="display:flex;gap:8px"><button class="lh-btn lh-btn-ghost lh-btn-sm">Edit</button><button class="lh-btn lh-btn-danger lh-btn-sm">Delete</button></div></div></div>
+        </div>
+      </main>
+
+      <!-- REPORTS -->
+      <main id="rep" class="lh-content pv-hide">
+        <div class="lh-phead">
+          <div class="lh-phead-ico">📊</div>
+          <div style="flex:1"><h1 class="lh-page-title" style="margin:0">Reports & Analytics</h1><p class="lh-page-sub" style="margin:2px 0 0">Organization-wide insights for 2026-06.</p></div>
+        </div>
+        <div class="lh-stat-grid">
+          <div class="lh-stat"><div class="lh-stat-ico">👥</div><div class="lh-stat-num">24</div><div class="lh-stat-label">Total Employees</div></div>
+          <div class="lh-stat"><div class="lh-stat-ico">✅</div><div class="lh-stat-num">23</div><div class="lh-stat-label">Active</div></div>
+          <div class="lh-stat"><div class="lh-stat-ico">💵</div><div class="lh-stat-num">$42K</div><div class="lh-stat-label">Payroll Paid</div></div>
+          <div class="lh-stat"><div class="lh-stat-ico">📊</div><div class="lh-stat-num">$1.9K</div><div class="lh-stat-label">Avg Salary</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px">
+          <div class="lh-card">
+            <h3 style="margin-top:0">Staff by role</h3>
+            <div style="display:flex;gap:22px;align-items:center;flex-wrap:wrap">
+              <svg width="168" height="168" viewBox="0 0 168 168">
+                <g transform="rotate(-90 84 84)">
+                  <circle cx="84" cy="84" r="72" fill="none" stroke="#eef2f9" stroke-width="20"/>
+                  <circle cx="84" cy="84" r="72" fill="none" stroke="#7c3aed" stroke-width="20" stroke-dasharray="113 339" stroke-dashoffset="0"/>
+                  <circle cx="84" cy="84" r="72" fill="none" stroke="#0891b2" stroke-width="20" stroke-dasharray="113 339" stroke-dashoffset="-113"/>
+                  <circle cx="84" cy="84" r="72" fill="none" stroke="#4f46e5" stroke-width="20" stroke-dasharray="226 226" stroke-dashoffset="-226"/>
+                </g>
+                <text x="84" y="80" text-anchor="middle" font-size="30" font-weight="800" fill="#16263d">24</text>
+                <text x="84" y="102" text-anchor="middle" font-size="12" fill="#64748b">total</text>
+              </svg>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;align-items:center;gap:9px;font-size:14px"><span style="width:12px;height:12px;border-radius:4px;background:#7c3aed"></span><strong>6</strong><span style="color:var(--lh-muted)">Admin</span></div>
+                <div style="display:flex;align-items:center;gap:9px;font-size:14px"><span style="width:12px;height:12px;border-radius:4px;background:#0891b2"></span><strong>6</strong><span style="color:var(--lh-muted)">HR</span></div>
+                <div style="display:flex;align-items:center;gap:9px;font-size:14px"><span style="width:12px;height:12px;border-radius:4px;background:#4f46e5"></span><strong>12</strong><span style="color:var(--lh-muted)">Employee</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="lh-card">
+            <h3 style="margin-top:0">Headcount by department</h3>
+            <div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span style="font-weight:600">Engineering</span><span style="color:var(--lh-muted)">12</span></div><div style="height:10px;background:#eef2f9;border-radius:6px;overflow:hidden"><div class="lh-bar-fill" style="width:100%;height:100%;background:var(--lh-grad);border-radius:6px"></div></div></div>
+            <div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span style="font-weight:600">Sales</span><span style="color:var(--lh-muted)">7</span></div><div style="height:10px;background:#eef2f9;border-radius:6px;overflow:hidden"><div class="lh-bar-fill" style="width:58%;height:100%;background:var(--lh-grad);border-radius:6px"></div></div></div>
+            <div style="margin-bottom:0"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span style="font-weight:600">Human Resources</span><span style="color:var(--lh-muted)">5</span></div><div style="height:10px;background:#eef2f9;border-radius:6px;overflow:hidden"><div class="lh-bar-fill" style="width:42%;height:100%;background:var(--lh-grad);border-radius:6px"></div></div></div>
+          </div>
+          <div class="lh-card">
+            <h3 style="margin-top:0">Leave requests</h3>
+            <div style="display:flex;gap:12px">
+              <div style="flex:1;background:#fef3c7;border-radius:12px;padding:16px 12px;text-align:center"><div style="font-size:26px;font-weight:800;color:#d97706">5</div><div style="font-size:12px;color:#d97706;font-weight:600">Pending</div></div>
+              <div style="flex:1;background:#dcfce7;border-radius:12px;padding:16px 12px;text-align:center"><div style="font-size:26px;font-weight:800;color:#16a34a">12</div><div style="font-size:12px;color:#16a34a;font-weight:600">Approved</div></div>
+              <div style="flex:1;background:#fee2e2;border-radius:12px;padding:16px 12px;text-align:center"><div style="font-size:26px;font-weight:800;color:#dc2626">2</div><div style="font-size:12px;color:#dc2626;font-weight:600">Rejected</div></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    function show(id){
+      var isLogin = id==='login';
+      document.getElementById('login').classList.toggle('pv-hide', !isLogin);
+      document.getElementById('app').classList.toggle('pv-hide', isLogin);
+      ['dash','emp','dept','rep'].forEach(function(v){
+        var el=document.getElementById(v); if(el) el.classList.toggle('pv-hide', v!==id);
+      });
+      ['dash','emp','dept','rep'].forEach(function(v){
+        var n=document.getElementById('nav-'+v); if(n) n.classList.toggle('lh-active', v===id);
+      });
+    }
+    show('dash');
+  </script>
+</body>
+</html>

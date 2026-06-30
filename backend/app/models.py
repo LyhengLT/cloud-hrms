@@ -88,6 +88,17 @@ class LeaveRequest(Base):
     employee = relationship("Employee", back_populates="leaves", foreign_keys=[employee_id])
 
 
+class PasswordResetToken(Base):
+    __tablename__ = "password_reset_tokens"
+
+    id = Column(Integer, primary_key=True, index=True)
+    employee_id = Column(Integer, ForeignKey("employees.id"), nullable=False)
+    token_hash = Column(String(64), unique=True, nullable=False, index=True)  # sha256 hex
+    expires_at = Column(DateTime, nullable=False)
+    used = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
 class Payslip(Base):
     __tablename__ = "payslips"
 

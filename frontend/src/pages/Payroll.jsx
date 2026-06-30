@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { api } from "../api";
 import { useAuth } from "../context/AuthContext.jsx";
+import { Chip, PageHeader } from "../components/ui.jsx";
 
 const thisMonth = new Date().toISOString().slice(0, 7);
+const money = (n) => "$" + Number(n || 0).toLocaleString(undefined, { maximumFractionDigits: 0 });
 
 export default function Payroll() {
   const { user } = useAuth();
@@ -33,10 +35,30 @@ export default function Payroll() {
     } catch (err) { setError(err.message); }
   }
 
+  async function downloadPdf(id) {
+    try { await api.payslipPdf(id); }
+    catch (e) { alert(e.message); }
+  }
+  async function exportExcel() {
+    try { await api.exportPayrollExcel(); }
+    catch (e) { alert(e.message); }
+  }
+
+  const totalNet = rows.reduce((a, p) => a + p.net_pay, 0);
+
   return (
     <div>
-      <h1 className="lh-page-title">Payroll</h1>
-      <p className="lh-page-sub">{isHR ? "Generate and review payslips." : "Your payslip history."}</p>
+      <PageHeader icon="💵" title="Payroll"
+        sub={isHR ? "Generate and review payslips." : "Your payslip history."}>
+        <button className="lh-btn lh-btn-green" onClick={exportExcel} disabled={rows.length === 0}>
+          ⬇ Export Excel
+        </button>
+      </PageHeader>
+
+      <div className="lh-chips">
+        <Chip label="Payslips" value={rows.length} />
+        <Chip label={isHR ? "Total paid" : "My total"} value={money(totalNet)} color="#16a34a" />
+      </div>
 
       {isHR && (
         <form className="lh-card" style={{ marginBottom: 20 }} onSubmit={generate}>
@@ -80,7 +102,7 @@ export default function Payroll() {
           <thead>
             <tr>
               {isHR && <th>Employee</th>}
-              <th>Period</th><th>Base</th><th>Allowances</th><th>Deductions</th><th>Net pay</th>
+              <th>Period</th><th>Base</th><th>Allowances</th><th>Deductions</th><th>Net pay</th><th></th>
             </tr>
           </thead>
           <tbody>
@@ -92,10 +114,15 @@ export default function Payroll() {
                 <td>${p.allowances.toLocaleString()}</td>
                 <td>${p.deductions.toLocaleString()}</td>
                 <td><strong>${p.net_pay.toLocaleString()}</strong></td>
+                <td style={{ textAlign: "right" }}>
+                  <button className="lh-btn lh-btn-ghost lh-btn-sm" onClick={() => downloadPdf(p.id)}>
+                    📄 PDF
+                  </button>
+                </td>
               </tr>
             ))}
             {rows.length === 0 && (
-              <tr><td colSpan={isHR ? 6 : 5} className="lh-empty">No payslips yet.</td></tr>
+              <tr><td colSpan={isHR ? 7 : 6} className="lh-empty">No payslips yet.</td></tr>
             )}
           </tbody>
         </table>

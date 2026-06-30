@@ -33,11 +33,42 @@ async function request(path, { method = "GET", body, form } = {}) {
   return data;
 }
 
+// Authenticated file download (sends the Bearer token, then saves the blob)
+async function download(path, fallbackName) {
+  const token = getToken();
+  const res = await fetch(`/api${path}`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.detail || `Download failed (${res.status})`);
+  }
+  // Try to read filename from the Content-Disposition header
+  let name = fallbackName;
+  const cd = res.headers.get("Content-Disposition");
+  const m = cd && cd.match(/filename="?([^"]+)"?/);
+  if (m) name = m[1];
+
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
 export const api = {
   // auth
   login: (email, password) =>
     request("/auth/login", { method: "POST", form: { username: email, password } }),
   me: () => request("/auth/me"),
+  forgotPassword: (email) =>
+    request("/auth/forgot-password", { method: "POST", body: { email } }),
+  resetPassword: (token, new_password) =>
+    request("/auth/reset-password", { method: "POST", body: { token, new_password } }),
 
   // departments
   listDepartments: () => request("/departments"),
@@ -64,8 +95,13 @@ export const api = {
   reviewLeave: (id, status) =>
     request(`/leaves/${id}/review`, { method: "PATCH", body: { status } }),
 
+  // stats (admin reports)
+  stats: () => request("/stats"),
+
   // payroll
   generatePayslip: (b) => request("/payroll", { method: "POST", body: b }),
+  payslipPdf: (id) => download(`/payroll/${id}/pdf`, `payslip-${id}.pdf`),
+  exportPayrollExcel: () => download("/payroll/export/excel", "payroll.xlsx"),
   myPayslips: () => request("/payroll/me"),
   allPayslips: () => request("/payroll"),
 };

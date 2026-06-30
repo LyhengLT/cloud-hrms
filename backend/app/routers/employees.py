@@ -1,10 +1,11 @@
 from datetime import date
 
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from ..database import get_db
-from ..models import Department, Employee, Role
+from ..models import Department, Employee, LeaveRequest, PasswordResetToken, Role
 from ..schemas import EmployeeCreate, EmployeeOut, EmployeeUpdate
 from ..security import get_current_user, hash_password, require_admin, require_hr
 
@@ -29,10 +30,12 @@ def list_employees(
 ):
     query = db.query(Employee)
     if q:
+        q = q.strip()
         like = f"%{q}%"
-        query = query.filter(
-            (Employee.full_name.ilike(like)) | (Employee.email.ilike(like))
-        )
+        conds = [Employee.full_name.ilike(like), Employee.email.ilike(like)]
+        if q.isdigit():  # also match the employee ID
+            conds.append(Employee.id == int(q))
+        query = query.filter(or_(*conds))
     if department_id:
         query = query.filter(Employee.department_id == department_id)
     return [_to_out(e) for e in query.order_by(Employee.full_name).all()]
@@ -122,5 +125,13 @@ def delete_employee(
         raise HTTPException(404, "Employee not found")
     if emp.id == actor.id:
         raise HTTPException(400, "You cannot delete your own account")
+
+    # Clean up references that aren't ORM-cascaded, else the FK blocks the delete:
+    # 1) password-reset tokens belonging to this employee
+    db.query(PasswordResetToken).filter(PasswordResetToken.employee_id == emp.id).delete()
+    # 2) leaves this employee reviewed for others (null the reviewer link)
+    db.query(LeaveRequest).filter(LeaveRequest.reviewed_by == emp.id).update({"reviewed_by": None})
+
+    # attendance, own leave requests, and payslips cascade via the relationships
     db.delete(emp)
     db.commit()

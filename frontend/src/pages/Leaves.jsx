@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../api";
 import { useAuth } from "../context/AuthContext.jsx";
+import { Chip, PageHeader } from "../components/ui.jsx";
 
 const today = new Date().toISOString().slice(0, 10);
 
@@ -31,10 +32,22 @@ export default function Leaves() {
     catch (e) { alert(e.message); }
   }
 
+  const c = {
+    pending: rows.filter((l) => l.status === "PENDING").length,
+    approved: rows.filter((l) => l.status === "APPROVED").length,
+    rejected: rows.filter((l) => l.status === "REJECTED").length,
+  };
+
   return (
     <div>
-      <h1 className="lh-page-title">Leave Requests</h1>
-      <p className="lh-page-sub">{isHR ? "Review and approve time-off requests." : "Request time off and track status."}</p>
+      <PageHeader icon="✈️" title="Leave Requests"
+        sub={isHR ? "Review and approve time-off requests." : "Request time off and track status."} />
+
+      <div className="lh-chips">
+        <Chip label="Pending" value={c.pending} color="#d97706" />
+        <Chip label="Approved" value={c.approved} color="#16a34a" />
+        <Chip label="Rejected" value={c.rejected} color="#dc2626" />
+      </div>
 
       {!isHR && (
         <form className="lh-card" style={{ marginBottom: 20 }} onSubmit={submit}>

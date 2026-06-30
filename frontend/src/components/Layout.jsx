@@ -8,6 +8,7 @@ const NAV = [
   { to: "/attendance", label: "Attendance", icon: "◷", roles: ["ADMIN", "HR", "EMPLOYEE"] },
   { to: "/leaves", label: "Leaves", icon: "✈", roles: ["ADMIN", "HR", "EMPLOYEE"] },
   { to: "/payroll", label: "Payroll", icon: "$", roles: ["ADMIN", "HR", "EMPLOYEE"] },
+  { to: "/reports", label: "Reports", icon: "📊", roles: ["ADMIN", "HR"] },
 ];
 
 export default function Layout() {

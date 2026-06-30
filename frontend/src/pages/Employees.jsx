@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../api";
 import { useAuth } from "../context/AuthContext.jsx";
+import { Avatar, Chip, PageHeader } from "../components/ui.jsx";
 
 const EMPTY = {
   full_name: "", email: "", phone: "", position: "",
@@ -57,30 +58,52 @@ export default function Employees() {
     catch (e) { alert(e.message); }
   }
 
+  const counts = {
+    total: rows.length,
+    admin: rows.filter((e) => e.role === "ADMIN").length,
+    hr: rows.filter((e) => e.role === "HR").length,
+    emp: rows.filter((e) => e.role === "EMPLOYEE").length,
+  };
+
   return (
     <div>
-      <h1 className="lh-page-title">Employees</h1>
-      <p className="lh-page-sub">Manage your organization's people.</p>
+      <PageHeader icon="👥" title="Employees" sub="Manage your organization's people.">
+        <button className="lh-btn" onClick={openCreate}>+ Add Employee</button>
+      </PageHeader>
+
+      <div className="lh-chips">
+        <Chip label="Total" value={counts.total} />
+        <Chip label="Admins" value={counts.admin} color="#7c3aed" />
+        <Chip label="HR" value={counts.hr} color="#0891b2" />
+        <Chip label="Employees" value={counts.emp} color="#16a34a" />
+      </div>
 
       <div className="lh-toolbar">
-        <input className="lh-input" style={{ maxWidth: 280 }} placeholder="Search name or email…"
+        <input className="lh-input" style={{ maxWidth: 320 }} placeholder="🔍  Search by ID, name, or email…"
           value={q} onChange={(e) => setQ(e.target.value)} />
-        <button className="lh-btn" onClick={openCreate}>+ Add Employee</button>
       </div>
 
       <div className="lh-table-wrap">
         <table className="lh-table">
           <thead>
             <tr>
-              <th>Name</th><th>Email</th><th>Position</th>
+              <th>ID</th><th>Name</th><th>Position</th>
               <th>Department</th><th>Role</th><th>Salary</th><th></th>
             </tr>
           </thead>
           <tbody>
             {rows.map((e) => (
               <tr key={e.id}>
-                <td>{e.full_name}</td>
-                <td>{e.email}</td>
+                <td style={{ color: "var(--lh-muted)", fontWeight: 600 }}>#{e.id}</td>
+                <td>
+                  <div className="lh-cell-user">
+                    <Avatar name={e.full_name} size={36} />
+                    <div>
+                      <div style={{ fontWeight: 600 }}>{e.full_name}</div>
+                      <div style={{ fontSize: 12, color: "var(--lh-muted)" }}>{e.email}</div>
+                    </div>
+                  </div>
+                </td>
                 <td>{e.position || "—"}</td>
                 <td>{e.department_name || "—"}</td>
                 <td><span className="lh-badge">{e.role}</span></td>

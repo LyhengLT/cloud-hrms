@@ -20,6 +20,19 @@ class LoginIn(BaseModel):
     password: str
 
 
+class ForgotPasswordIn(BaseModel):
+    email: EmailStr
+
+
+class ResetPasswordIn(BaseModel):
+    token: str
+    new_password: str
+
+
+class MessageOut(BaseModel):
+    message: str
+
+
 # ---------- Department ----------
 class DepartmentBase(BaseModel):
     name: str
