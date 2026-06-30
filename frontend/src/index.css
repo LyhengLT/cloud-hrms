@@ -91,7 +91,7 @@ body {
   display: flex; align-items: center; justify-content: space-between; padding: 0 28px;
   position: sticky; top: 0; z-index: 20;
 }
-.lh-user { display: flex; align-items: center; gap: 16px; }
+.lh-user { display: flex; align-items: center; gap: 16px; margin-left: auto; }
 .lh-user-info { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.3; }
 .lh-badge {
   font-size: 11px; background: linear-gradient(135deg, #eef2ff, #e0e7ff); color: var(--lh-primary);
@@ -358,10 +358,49 @@ table.lh-table { width: 100%; border-collapse: collapse; font-size: 14px; }
 .lh-demo strong { color: var(--lh-primary); }
 .lh-block { width: 100%; padding: 13px; font-size: 15px; }
 
+/* ---------- Mobile menu controls (hidden on desktop) ---------- */
+.lh-burger { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--lh-text); padding: 4px 8px; line-height: 1; }
+.lh-brand-mobile { display: none; align-items: center; gap: 8px; font-weight: 800; font-size: 16px; }
+.lh-nav-overlay { display: none; }
+
 /* ---------- Responsive ---------- */
-@media (max-width: 720px) {
-  .lh-sidebar { width: 188px; padding: 18px 10px; }
-  .lh-content { padding: 18px; }
+@media (max-width: 860px) {
+  /* Sidebar becomes a slide-in drawer */
+  .lh-sidebar {
+    position: fixed; top: 0; left: 0; height: 100vh; width: 250px; z-index: 60;
+    transform: translateX(-100%); transition: transform .28s cubic-bezier(.4,0,.2,1);
+  }
+  .lh-sidebar.lh-open { transform: translateX(0); box-shadow: 0 0 40px rgba(0,0,0,.4); }
+  .lh-nav-overlay {
+    display: block; position: fixed; inset: 0; background: rgba(15,23,42,.5);
+    z-index: 55; animation: lh-fade-in .2s ease;
+  }
+  .lh-burger { display: block; }
+  .lh-brand-mobile { display: flex; }
+  .lh-topbar { gap: 10px; padding: 0 14px; }
+  /* hide the long full name on small screens, keep the role badge */
+  .lh-user-info strong { display: none; }
+  .lh-content { padding: 16px; }
+
+  /* Hero stacks */
+  .lh-hero { flex-direction: column; align-items: flex-start; gap: 12px; padding: 20px; }
+  .lh-hero-title { font-size: 21px; }
+  .lh-clock { flex-direction: column; align-items: flex-start; }
+
+  /* Tables scroll sideways instead of breaking the layout */
+  .lh-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table.lh-table { min-width: 640px; }
+
+  .lh-page-title { font-size: 20px; }
+  .lh-phead-ico { width: 44px; height: 44px; font-size: 22px; }
+  .lh-modal { padding: 20px; }
+}
+
+@media (max-width: 480px) {
+  .lh-content { padding: 12px; }
+  .lh-btn { padding: 9px 13px; }
+  .lh-phead { gap: 12px; }
+  .lh-hero-badge { font-size: 12px; padding: 6px 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

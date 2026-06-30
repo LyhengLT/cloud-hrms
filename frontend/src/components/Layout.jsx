@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 
@@ -14,6 +15,7 @@ const NAV = [
 export default function Layout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [navOpen, setNavOpen] = useState(false);
 
   function handleLogout() {
     logout();
@@ -22,7 +24,10 @@ export default function Layout() {
 
   return (
     <div className="lh-app">
-      <aside className="lh-sidebar">
+      {/* Mobile overlay behind the drawer */}
+      {navOpen && <div className="lh-nav-overlay" onClick={() => setNavOpen(false)} />}
+
+      <aside className={"lh-sidebar" + (navOpen ? " lh-open" : "")}>
         <div className="lh-brand">
           <span className="lh-logo">⛅</span> Cloud HRMS
         </div>
@@ -32,6 +37,7 @@ export default function Layout() {
               key={item.to}
               to={item.to}
               end={item.to === "/"}
+              onClick={() => setNavOpen(false)}
               className={({ isActive }) => "lh-nav-item" + (isActive ? " lh-active" : "")}
             >
               <span className="lh-nav-icon">{item.icon}</span>
@@ -43,7 +49,16 @@ export default function Layout() {
 
       <div className="lh-main">
         <header className="lh-topbar">
-          <div />
+          <button
+            className="lh-burger"
+            onClick={() => setNavOpen((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            ☰
+          </button>
+          <div className="lh-brand-mobile">
+            <span className="lh-logo" style={{ width: 30, height: 30, fontSize: 17 }}>⛅</span> Cloud HRMS
+          </div>
           <div className="lh-user">
             <div className="lh-user-info">
               <strong>{user.full_name}</strong>
